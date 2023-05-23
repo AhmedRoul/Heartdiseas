@@ -1,27 +1,14 @@
-
+##########
+#Functions
 min_max_scale <- function(x) {
   x=(x - min(x)) / (max(x) - min(x))
  
 }
+
 ###########
 ###read file 
 
 data<- read.table(header = TRUE,"Heartdiseas.txt",sep=",")
-
-#############
-##remove any row duplicated   by id 
-
-numberRowsData<-nrow(data)
-
-numberRowsunique<-nrow(unique( data[ , 1:2 ] ))
-
-#numberRowsData is greater than numberRowsunique 
-#there are rows duplicated
-if(numberRowsData>numberRowsunique)
-{
-#get unique "id " ->data[,1,2]
-#data<-  unique( data[ , 1:2 ])
-}
 
 ########################
 #unnecessary columns
@@ -29,7 +16,7 @@ if(numberRowsData>numberRowsunique)
 data$id<-NULL
 
 
-#####################
+########################
 
 #know columns include null values 
 for (name in names(data))
@@ -39,13 +26,15 @@ for (name in names(data))
     print(name,str( sum (is.na(data[name]))))
   }
 }
-############################
 
+############################
 # result  columns include null  int 1 [1] "slope"
 #we can replace missing values by more frequency 
 most_freq <- which.max(table(data["slope"]))
 data["slope"] <- replace(data["slope"], is.na(data["slope"]),most_freq )
 
+
+############
 ############
 ##Split Ages into Age Groups 
 data$age <- cut.default(data$age, breaks = c(0, 15, 30,45,60,75,90), labels = c(0, 1,2,3,4,5))
@@ -74,10 +63,16 @@ cor(data)
 
 data$thalach<-NULL
 
-
+####################
+#summary
 summary(data)
 
+
+
+##################
+#get The Optimal Number Of Clusters
 library(cluster)
+
 
 wss <- numeric(15) 
 for (i in 1:15) 
@@ -88,28 +83,44 @@ plot(1:15, wss, type="b", xlab="Number of Clusters",
 
 
 ##################################
-#best number of cluster is 5 from plot 
 
 km<-kmeans(data, 5)
+###plot kmeans >>
 
-namescol<-names(data)
 
+
+
+
+
+########
 
 library(cluster)
+#install.packages("dendextend")
+library(dendextend)
+
+
 ####Hierarchical Clustering
 dist_mat <- dist(data, method = 'euclidean')
 hclust_avg <- hclust(dist_mat, method = 'average')
-
+hclust_avg =as.dendrogram(hclust_avg)
 plot(hclust_avg)
+dend <- hclust_avg
+dend <- color_branches(dend, k = 7)
+dend <- color_labels(dend, k = 7)
+plot(dend)#4CLUSTERS
 
-rect.hclust(hclust_avg, k=  5, border = "red")
 
 #######################
 ####Agglomerative Clustering using average
 avg = agnes(x=data, diss = FALSE, stand = TRUE,method = "average")
 avgDendrogram =as.dendrogram(avg)
+plot (avgDendrogram)
 
-plot(avgDendrogram)
+
+dend <- avgDendrogram
+dend <- color_branches(dend, k = 5)
+dend <- color_labels(dend, k = 8)
+plot(dend) # 3CLUSTERS
 
 ########################
 ####Agglomerative Clustering using average
@@ -119,11 +130,22 @@ singleDendrogram =as.dendrogram(single)
 plot(singleDendrogram)
 
 
-###################
+dend <- singleDendrogram
+dend <- color_branches(dend, k = 8)
+dend <- color_labels(dend, k = 8)
+plot(dend)# 2CLUSTERS
+
+################### 
 ####Agglomerative Clustering using complete complete
 complete = agnes(x=data, diss = FALSE, stand = TRUE,method = "complete")
 completeDendrogram =as.dendrogram(complete)
 
 plot(completeDendrogram)
+
+dend <- completeDendrogram
+dend <- color_branches(dend, k = 8)
+dend <- color_labels(dend, k = 8)
+plot(dend) #5CLUSTERS
+
 ###########################
 
