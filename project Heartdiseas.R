@@ -1,3 +1,14 @@
+# install.packages("factoextra")
+#install.packages("pheatmap")
+install.packages("dendextend")
+
+library("factoextra")
+library(cluster)
+library(graphics)
+library(ggplot2)
+library(pheatmap)
+library(dendextend)
+
 ##########
 #Functions
 min_max_scale <- function(x) {
@@ -5,7 +16,7 @@ min_max_scale <- function(x) {
  
 }
 
-###########
+##################################
 ###read file 
 
 data<- read.table(header = TRUE,"Heartdiseas.txt",sep=",")
@@ -14,7 +25,6 @@ data<- read.table(header = TRUE,"Heartdiseas.txt",sep=",")
 #unnecessary columns
 
 data$id<-NULL
-
 
 ########################
 
@@ -37,9 +47,9 @@ data["slope"] <- replace(data["slope"], is.na(data["slope"]),most_freq )
 ############
 ############
 ##Split Ages into Age Groups 
-data$age <- cut.default(data$age, breaks = c(0, 15, 30,45,60,75,90), labels = c(0, 1,2,3,4,5))
-
-data$age<-as.numeric(as.character(data$age))
+# data$age <- cut.default(data$age, breaks = c(0, 15, 30,45,60,75,90), labels = c(0, 1,2,3,4,5))
+# 
+# data$age<-as.numeric(as.character(data$age))
 
 ##############
 #scale colums
@@ -51,28 +61,27 @@ for (i in scaleName){
   data[i]=min_max_scale(data[i])
 }
 
-#####################
+###################################
 #list
 typeof(data)
 class(data)
 cor(data)
 
+####################################
+# Create a heatmap of the variable correlations
+heatmap(cor(data), scale = "none")
 
-######
+######################################
 ###ALL corr between thalach and columns in data  negative value 
 
 data$thalach<-NULL
 
-####################
+#####################################
 #summary
 summary(data)
 
-
-
-##################
+####################################
 #get The Optimal Number Of Clusters
-library(cluster)
-
 
 wss <- numeric(15) 
 for (i in 1:15) 
@@ -83,22 +92,15 @@ plot(1:15, wss, type="b", xlab="Number of Clusters",
 
 
 ##################################
+#best number of cluster is 4 from plot 
 
-km<-kmeans(data, 5)
-###plot kmeans >>
+km<-kmeans(data, 4)
 
+####visualization of Kmeans clustering
 
+fviz_cluster(km, data, stand = FALSE, geom = "point")
 
-
-
-
-########
-
-library(cluster)
-#install.packages("dendextend")
-library(dendextend)
-
-
+####################################
 ####Hierarchical Clustering
 dist_mat <- dist(data, method = 'euclidean')
 hclust_avg <- hclust(dist_mat, method = 'average')
@@ -110,7 +112,7 @@ dend <- color_labels(dend, k = 7)
 plot(dend)#4CLUSTERS
 
 
-#######################
+###################################
 ####Agglomerative Clustering using average
 avg = agnes(x=data, diss = FALSE, stand = TRUE,method = "average")
 avgDendrogram =as.dendrogram(avg)
