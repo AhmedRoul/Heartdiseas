@@ -1,4 +1,3 @@
-setwd("F:/Data science/drive-download-20230328T103747Z-001/DataScience and BigData/Project_Data")
 
 min_max_scale <- function(x) {
   x=(x - min(x)) / (max(x) - min(x))
@@ -95,5 +94,36 @@ km<-kmeans(data, 5)
 
 namescol<-names(data)
 
-#install.packages('Rcpp', dependencies = TRUE)
+
+library(cluster)
+####Hierarchical Clustering
+dist_mat <- dist(data, method = 'euclidean')
+hclust_avg <- hclust(dist_mat, method = 'average')
+
+plot(hclust_avg)
+
+rect.hclust(hclust_avg, k=  5, border = "red")
+
+#######################
+####Agglomerative Clustering using average
+avg = agnes(x=data, diss = FALSE, stand = TRUE,method = "average")
+avgDendrogram =as.dendrogram(avg)
+
+plot(avgDendrogram)
+
+########################
+####Agglomerative Clustering using average
+single = agnes(x=data, diss = FALSE, stand = TRUE,method = "single")
+singleDendrogram =as.dendrogram(single)
+
+plot(singleDendrogram)
+
+
+###################
+####Agglomerative Clustering using complete complete
+complete = agnes(x=data, diss = FALSE, stand = TRUE,method = "complete")
+completeDendrogram =as.dendrogram(complete)
+
+plot(completeDendrogram)
+###########################
 
