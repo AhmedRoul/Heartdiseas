@@ -57,6 +57,48 @@ for (name in names(data))
 most_freq <- which.max(table(data["slope"]))
 data["slope"] <- replace(data["slope"], is.na(data["slope"]),most_freq )
 
+#############################################################
+# boxplot for data Before Removing Outliers
+#############################################
+
+boxplot(data)
+boxplot(data$chol, main="chol - before")
+boxplot(data$trestbps, main="trestbps - before")
+boxplot(data$oldpeak, main="oldpeak - before")
+
+#############################################################
+# Removing Outliers 
+#######################
+
+IQR <- quantile(data$chol, 0.75) - quantile(data$chol, 0.25)
+upper_limit <- quantile(data$chol, 0.75) + (1.5 * IQR)
+lower_limit <- quantile(data$chol, 0.25) - (1.5 * IQR)
+
+data <- subset(data, data$chol > lower_limit & data$chol < upper_limit)
+
+#############################################################
+
+IQR <- quantile(data$trestbps, 0.75) - quantile(data$trestbps, 0.25)
+upper_limit <- quantile(data$trestbps, 0.75) + (1.5 * IQR)
+lower_limit <- quantile(data$trestbps, 0.25) - (1.5 * IQR)
+
+data <- subset(data, data$trestbps > lower_limit & data$trestbps < upper_limit)
+
+##############################################################
+
+IQR <- quantile(data$oldpeak, 0.75) - quantile(data$oldpeak, 0.25)
+upper_limit <- quantile(data$oldpeak, 0.75) + (1.5 * IQR)
+lower_limit <- quantile(data$oldpeak, 0.25) - (1.5 * IQR)
+
+data <- subset(data, data$oldpeak > lower_limit & data$oldpeak < upper_limit)
+
+#############################################################
+# boxplot for data Before Removing Outliers
+#############################################
+
+boxplot(data$chol, main="chol - after")
+boxplot(data$trestbps, main="trestbps - after")
+boxplot(data$oldpeak, main="oldpeak - after")
 
 #############################################################
 ##Split Ages into Age Groups 
@@ -146,7 +188,7 @@ fviz_dend(hclust(dist_mat), k = 4, show_labels = FALSE,
 avg = agnes(x=data, diss = FALSE, stand = TRUE, method = "average")
 avgDendrogram =as.dendrogram(avg)
 
-fviz_dend(avgDendrogram, k = 7, show_labels = FALSE,
+fviz_dend(avgDendrogram, k = 2, show_labels = FALSE,
           main="Agglomerative Clustering using average")
 
 #############################################################
@@ -156,7 +198,7 @@ fviz_dend(avgDendrogram, k = 7, show_labels = FALSE,
 single = agnes(x=data, diss = FALSE, stand = TRUE, method = "single")
 singleDendrogram =as.dendrogram(single)
 
-fviz_dend(singleDendrogram, k = 7, show_labels = FALSE,
+fviz_dend(singleDendrogram, k = 2, show_labels = FALSE,
           main="Agglomerative Clustering using single")
 
 #############################################################
