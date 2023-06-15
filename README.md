@@ -2,11 +2,7 @@
 
 Developed by
 
-<h4>Sondos Akram: <a href="https://github.com/sondosakramm">@sondosakramm</a></h4>
-<br>
-<h4>Nada Adel:  <a href="https://github.com/Nada-Adel-Ghonem">@Nada-Adel-Ghonem</a></h4>
-<br>
-<h4>Ahmed Nagy:  <a href="https://github.com/AhmedRoul">@AhmedRoul</a></h4>
+<h4>Sondos Akram: <a href="https://github.com/sondosakramm">@sondosakramm</a></h4><h4>Nada Adel:  <a href="https://github.com/Nada-Adel-Ghonem">@Nada-Adel-Ghonem</a></h4><h4>Ahmed Nagy:  <a href="https://github.com/AhmedRoul">@AhmedRoul</a></h4>
 <br>
 
 ![2e90fef40a4045f0a9148bf7628b7bac-0](https://github.com/AhmedRoul/Heartdiseas/assets/64781251/efce792d-663b-4257-8173-19f5cf6c0a76)
