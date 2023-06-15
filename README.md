@@ -1,4 +1,4 @@
-# Heart Diseas
+# Heart Disease
 
 Developed by
 
